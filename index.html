@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Case Study Portfolio</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        nav {
+            background-color: #00509e;
+            color: white;
+            padding: 10px 20px;
+        }
+        nav ul {
+            display: flex;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        section {
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #00509e;
+        }
+        .admin-section {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .dropdown-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .dropdown-container select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        .slideshow-container {
+            position: relative;
+            overflow: hidden;
+            max-width: 100%;
+        }
+        .slide {
+            display: none;
+        }
+        .active-slide {
+            display: block;
+            border: none;
+        }
+        iframe {
+            border: none;
+            pointer-events: none;
+        }
+        footer {
+            text-align: center;
+            background-color: #00509e;
+            color: white;
+            padding: 10px 0;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#case-studies">Case Studies</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Admin Upload Section (Visible to Admin Only) -->
+    <section id="admin" class="admin-section">
+        <h2>Admin Panel</h2>
+        <form id="upload-form" enctype="multipart/form-data">
+            <label for="file-upload">Upload Case Study (PDF):</label>
+            <input type="file" id="file-upload" accept=".pdf">
+            <button type="button" onclick="uploadCaseStudy()">Upload</button>
+        </form>
+        <p id="upload-status"></p>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h1>Your Name</h1>
+        <p>Brief introduction about you and your work.</p>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section id="case-studies">
+        <h2>Case Studies</h2>
+        <div class="dropdown-container">
+            <label for="case-study-dropdown">Select a Case Study:</label>
+            <select id="case-study-dropdown" onchange="showSelectedCaseStudy()">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+        <div class="slideshow-container" id="slideshow-container">
+            <div class="slide active-slide">
+                <p>No case studies uploaded yet.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <h2>Skills</h2>
+        <ul>
+            <li>Agile/Scrum</li>
+            <li>User Research</li>
+            <li>Wireframing & Prototyping</li>
+        </ul>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>Email: <a href="mailto:your-email@example.com">your-email@example.com</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 Your Name. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Mock admin authentication
+        const isAdmin = true;
+        if (isAdmin) {
+            document.querySelector('.admin-section').style.display = 'block';
+        }
+
+        // Handle case study uploads
+        const caseStudies = [];
+        function uploadCaseStudy() {
+            const fileInput = document.getElementById('file-upload');
+            if (fileInput.files.length === 0) {
+                document.getElementById('upload-status').textContent = "Please select a file to upload.";
+                return;
+            }
+            const file = fileInput.files[0];
+            caseStudies.push(file);
+            document.getElementById('upload-status').textContent = `Uploaded: ${file.name}`;
+            updateDropdown();
+        }
+
+        // Update dropdown with uploaded case studies
+        function updateDropdown() {
+            const dropdown = document.getElementById('case-study-dropdown');
+            dropdown.innerHTML = '<option value="">-- Select --</option>'; // Reset dropdown
+            caseStudies.forEach((caseStudy, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = caseStudy.name;
+                dropdown.appendChild(option);
+            });
+        }
+
+        // Show selected case study in the slideshow
+        function showSelectedCaseStudy() {
+            const selectedIndex = document.getElementById('case-study-dropdown').value;
+            const container = document.getElementById('slideshow-container');
+            container.innerHTML = ""; // Clear previous slides
+            if (selectedIndex === "") {
+                container.innerHTML = '<p>No case studies uploaded yet.</p>';
+            } else {
+                const caseStudy = caseStudies[selectedIndex];
+                const slide = document.createElement('div');
+                slide.className = 'slide active-slide';
+                slide.innerHTML = `<iframe src="${URL.createObjectURL(caseStudy)}" width="100%" height="500px"></iframe>`;
+                container.appendChild(slide);
+            }
+        }
+    </script>
+</body>
+</html>
