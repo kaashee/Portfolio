@@ -64,17 +64,19 @@
             position: relative;
             overflow: hidden;
             max-width: 100%;
+            text-align: center;
         }
         .slide {
             display: none;
         }
         .active-slide {
             display: block;
-            border: none;
         }
         iframe {
             border: none;
             pointer-events: none;
+            width: 100%;
+            height: 500px;
         }
         footer {
             text-align: center;
@@ -152,8 +154,8 @@
     </footer>
 
     <script>
-        // Mock admin authentication
-        const isAdmin = true;
+        // Mock admin authentication (you can set this to false to hide admin section)
+        const isAdmin = false;
         if (isAdmin) {
             document.querySelector('.admin-section').style.display = 'block';
         }
@@ -195,7 +197,7 @@
                 const caseStudy = caseStudies[selectedIndex];
                 const slide = document.createElement('div');
                 slide.className = 'slide active-slide';
-                slide.innerHTML = `<iframe src="${URL.createObjectURL(caseStudy)}" width="100%" height="500px"></iframe>`;
+                slide.innerHTML = `<iframe src="${URL.createObjectURL(caseStudy)}"></iframe>`;
                 container.appendChild(slide);
             }
         }
